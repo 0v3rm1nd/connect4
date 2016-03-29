@@ -69,6 +69,46 @@ public class HelperFunctions {
 
     }
 
+    /*prints the whole board to the console*/
+    public static void printBoard(int[][] board, int x, int y) {
+        for (int row = 0; row < y; row++) {
+            for (int col = 0; col < x; col++) {
+                System.out.print(board[col][row] + " ");
+            }
+            System.out.println("\n");
+        }
+        System.out.print("\n------------------\n");
+    }
+
+    /*used for debugging/troubleshooting, the same as eval function but returns the whole matrix which can be afterwards printed via print*/
+    public static int[][] scoreBoard(int[][] state, int playerID, int x, int y) {
+        int[][] scoreBoard = new int[x][y];
+
+        for (int col = 0; col < x; col++) {
+            EvalFunc.countVertical(state, scoreBoard, col, playerID, y);
+        }
+        for (int row = 0; row < y; row++) {
+            EvalFunc.countHorizontal(state, scoreBoard, row, playerID, y);
+        }
+
+        for (int row = y - 1; row > y - 4; row--) {
+            EvalFunc.countDiagonalRight(state, scoreBoard, 0, row, playerID, x);
+            EvalFunc.countDiagonalLeft(state, scoreBoard, x - 1, row, playerID);
+        }
+        for (int col = 1; col < x - 4; col++) {
+            EvalFunc.countDiagonalRight(state, scoreBoard, col, y - 1, playerID, x);
+        }
+        for (int col = x - 1; col > 3; col--) {
+            EvalFunc.countDiagonalLeft(state, scoreBoard, col, y - 1, playerID);
+        }
+        //Remaining Column Diagonals from row y
+//        System.out.println("Eval score for player " + player + " is: " + total + " for board:");
+//        printBoard(state);
+        //System.out.println("Score: " + total + " For " + player);
+        return scoreBoard;
+    }
+
+
     /*return the indexes of the columns that are empty*/
     public static List<Integer> availableActions(int[][] board) {
         List<Integer> actions = new ArrayList<Integer>();
